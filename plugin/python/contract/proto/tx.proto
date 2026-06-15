@@ -54,3 +54,12 @@ message Signature {
   // signature: the bytes of the signature output from a private key which may be verified with the message and public
   bytes signature = 2;
 }
+message MessageCreateProfile {
+  bytes user_address = 1;
+  string username = 2;
+}
+
+message MessageEndorseUser {
+  bytes sender_address = 1;
+  bytes target_address = 2;
+}
