@@ -25,6 +25,8 @@ from .proto import (
     PluginEndRequest,
     PluginEndResponse,
     MessageSend,
+    MessageCreateProfile,
+    MessageEndorseUser,
     PluginKeyRead,
     PluginStateReadRequest,
     PluginStateWriteRequest,
@@ -54,10 +56,12 @@ CONTRACT_CONFIG = {
     "name": "python_plugin_contract",
     "id": 1,
     "version": 1,
-    "supported_transactions": ["send"],
+    "supported_transactions": ["send", "createprofile", "endorseuser"],
     "transaction_type_urls": [
-        "type.googleapis.com/types.MessageSend",
-    ],
+    	"type.googleapis.com/types.MessageSend",
+    	"type.googleapis.com/types.MessageCreateProfile",
+    	"type.googleapis.com/types.MessageEndorseUser",
+],
     "event_type_urls": [],
     # Include google/protobuf/any.proto first as it's a dependency of event.proto and tx.proto
     "file_descriptor_protos": [
@@ -203,6 +207,17 @@ class Contract:
                 msg = MessageSend()
                 msg.ParseFromString(request.tx.msg.value)
                 return self._check_message_send(msg)
+
+            elif type_url.endswith("/types.MessageCreateProfile"):
+                msg = MessageCreateProfile()
+                msg.ParseFromString(request.tx.msg.value)
+                return self._check_message_create_profile(msg)
+
+            elif type_url.endswith("/types.MessageEndorseUser"):
+                msg = MessageEndorseUser()
+                msg.ParseFromString(request.tx.msg.value)
+                return self._check_message_endorse_user(msg)
+
             else:
                 raise err_invalid_message_cast()
 
@@ -228,6 +243,17 @@ class Contract:
                 msg = MessageSend()
                 msg.ParseFromString(request.tx.msg.value)
                 return await self._deliver_message_send(msg, request.tx.fee)
+
+            elif type_url.endswith("/types.MessageCreateProfile"):
+                msg = MessageCreateProfile()
+                msg.ParseFromString(request.tx.msg.value)
+                return await self._deliver_message_create_profile(msg)
+
+            elif type_url.endswith("/types.MessageEndorseUser"):
+                msg = MessageEndorseUser()
+                msg.ParseFromString(request.tx.msg.value)
+                return await self._deliver_message_endorse_user(msg)
+
             else:
                 raise err_invalid_message_cast()
 
@@ -373,3 +399,29 @@ class Contract:
         if write_resp.HasField("error"):
             result.error.CopyFrom(write_resp.error)
         return result
+    def _check_message_create_profile(self, msg):
+        response = PluginCheckResponse()
+
+        if len(msg.user_address) != 20:
+            raise err_invalid_address()
+
+        response.authorized_signers.append(msg.user_address)
+        return response
+
+    def _check_message_endorse_user(self, msg):
+        response = PluginCheckResponse()
+
+        if len(msg.sender_address) != 20:
+            raise err_invalid_address()
+
+        if len(msg.target_address) != 20:
+            raise err_invalid_address()
+
+        response.authorized_signers.append(msg.sender_address)
+        return response
+
+    async def _deliver_message_create_profile(self, msg):
+        return PluginDeliverResponse()
+
+    async def _deliver_message_endorse_user(self, msg):
+        return PluginDeliverResponse()
