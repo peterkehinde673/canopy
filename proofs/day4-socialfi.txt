@@ -1,0 +1,21 @@
+=== Day 4 ===
+Sun Jun 21 12:36:51 WAT 2026
+
+Modified tx.proto:
+message MessageCreateProfile {
+  bytes user_address = 1;
+  string username = 2;
+  string bio = 3;
+}
+
+message MessageEndorseUser {
+  bytes sender_address = 1;
+  bytes target_address = 2;
+  string endorsement_reason = 3;
+}
+
+message MessageEndorseUser {
+  bytes sender_address = 1;
+  bytes target_address = 2;
+  string endorsement_reason = 3;
+}

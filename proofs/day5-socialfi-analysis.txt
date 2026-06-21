@@ -1,0 +1,14 @@
+Day 5 Findings
+
+MessageCreateProfile:
+- Validation implemented
+- Authorized signer = user_address
+- Delivery logic currently empty
+
+MessageEndorseUser:
+- Validation implemented
+- Authorized signer = sender_address
+- Delivery logic currently empty
+
+Conclusion:
+SocialFi message types are registered and validated but profile storage and endorsement persistence have not yet been implemented.

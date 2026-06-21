@@ -1,0 +1,19 @@
+Day 6 Findings
+
+Existing storage keys:
+- key_for_account()
+- key_for_fee_params()
+- key_for_fee_pool()
+
+Existing persistent state:
+- Account
+- Pool
+- FeeParams
+
+Missing:
+- Profile storage key
+- Endorsement storage key
+- Social graph storage
+
+Conclusion:
+SocialFi messages exist but no persistent storage layer has been implemented yet.

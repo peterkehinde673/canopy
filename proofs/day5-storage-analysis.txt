@@ -1,0 +1,15 @@
+Day 5 Storage Analysis
+
+state_write occurrences:
+376:            write_resp = await self.plugin.state_write(
+387:            write_resp = await self.plugin.state_write(
+
+CreateProfile delivery:
+    async def _deliver_message_create_profile(self, msg):
+        return PluginDeliverResponse()
+
+    async def _deliver_message_endorse_user(self, msg):
+
+EndorseUser delivery:
+    async def _deliver_message_endorse_user(self, msg):
+        return PluginDeliverResponse()
