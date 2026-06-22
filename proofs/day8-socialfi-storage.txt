@@ -1,0 +1,30 @@
+Day 8 SocialFi Storage Proof
+
+Profile object:
+message Profile {
+  bytes user_address = 1;
+  string username = 2;
+  string bio = 3;
+}
+message Endorsement {
+  bytes sender_address = 1;
+  bytes target_address = 2;
+  string endorsement_reason = 3;
+  uint64 timestamp = 4;
+}
+
+Endorsement object:
+message Endorsement {
+  bytes sender_address = 1;
+  bytes target_address = 2;
+  string endorsement_reason = 3;
+  uint64 timestamp = 4;
+}
+
+Profile key:
+122:def key_for_profile(address: bytes) -> bytes:
+438:        profile_key = key_for_profile(msg.user_address)
+
+Endorsement key:
+125:def key_for_endorsement(sender: bytes, target: bytes) -> bytes:
+469:        endorsement_key = key_for_endorsement(
