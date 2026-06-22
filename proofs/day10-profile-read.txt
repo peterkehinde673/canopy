@@ -1,0 +1,20 @@
+Day 10 Profile Read Support
+
+Implemented:
+
+- get_profile(address)
+- state_read() lookup
+- profile key retrieval
+- Profile unmarshalling
+
+Flow:
+
+address
+ -> key_for_profile()
+ -> state_read()
+ -> Profile bytes
+ -> unmarshal(Profile)
+
+Result:
+
+Profiles can now be stored and retrieved from chain state.
