@@ -31,4 +31,5 @@ message Endorsement {
   bytes sender_address = 1;
   bytes target_address = 2;
   string endorsement_reason = 3;
+  uint64 timestamp = 4;
 }
