@@ -8,6 +8,7 @@ Matches Go's contract/contract.go structure.
 import random
 import struct
 from typing import Optional, Dict, Any, Union, Protocol, TYPE_CHECKING
+from contract.proto.account_pb2 import Account, Pool, Profile
 
 if TYPE_CHECKING:
     from .plugin import Plugin, Config
@@ -118,6 +119,8 @@ def key_for_fee_pool(chain_id: int) -> bytes:
     """Generate state database key for fee pool."""
     return join_len_prefix(POOL_PREFIX, format_uint64(chain_id))
 
+def key_for_profile(address: bytes) -> bytes:
+    return b"profile/" + address
 
 # Proto marshal/unmarshal utilities
 
@@ -421,7 +424,35 @@ class Contract:
         return response
 
     async def _deliver_message_create_profile(self, msg):
-        return PluginDeliverResponse()
+        if not self.plugin:
+       	    raise PluginError(1, "plugin", "plugin not initialized")
+
+        profile = Profile()
+        profile.user_address = msg.user_address
+        profile.username = msg.username
+        profile.bio = msg.bio
+
+        profile_key = key_for_profile(msg.user_address)
+        profile_bytes = marshal(profile)
+
+        write_resp = await self.plugin.state_write(
+            self,
+            PluginStateWriteRequest(
+                sets=[
+                    PluginSetOp(
+                        key=profile_key,
+                        value=profile_bytes
+                    )
+                ]
+            ),
+        )
+
+        result = PluginDeliverResponse()
+
+        if write_resp.HasField("error"):
+            result.error.CopyFrom(write_resp.error)
+
+        return result
 
     async def _deliver_message_endorse_user(self, msg):
         return PluginDeliverResponse()

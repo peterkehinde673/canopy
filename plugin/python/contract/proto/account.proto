@@ -22,3 +22,8 @@ message Pool {
   // amount: the balance of funds the pool has
   uint64 amount = 2;
 }
+message Profile {
+  bytes user_address = 1;
+  string username = 2;
+  string bio = 3;
+}
