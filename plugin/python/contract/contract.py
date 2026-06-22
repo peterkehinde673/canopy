@@ -491,3 +491,59 @@ class Contract:
              result.error.CopyFrom(write_resp.error)
 
         return result
+
+    async def get_profile(self, address: bytes):
+        if not self.plugin:
+            raise PluginError(1, "plugin", "plugin not initialized")
+
+        profile_key = key_for_profile(address)
+
+        response = await self.plugin.state_read(
+            self,
+            PluginStateReadRequest(
+                keys=[
+                    PluginKeyRead(
+                        query_id=random.randint(0, 2**53),
+                        key=profile_key
+                    )
+                ]
+            ),
+        )
+
+        if response.HasField("error"):
+            return None
+
+        if not response.results or not response.results[0].entries:
+            return None
+
+        profile_bytes = response.results[0].entries[0].value
+
+        return unmarshal(Profile, profile_bytes)
+
+    async def get_endorsement(self, sender: bytes, target: bytes):
+        if not self.plugin:
+            raise PluginError(1, "plugin", "plugin not initialized")
+
+        endorsement_key = key_for_endorsement(sender, target)
+
+        response = await self.plugin.state_read(
+            self,
+            PluginStateReadRequest(
+                keys=[
+                    PluginKeyRead(
+                        query_id=random.randint(0, 2**53),
+                        key=endorsement_key
+                    )
+                ]
+            ),
+        )
+
+        if response.HasField("error"):
+            return None
+
+        if not response.results or not response.results[0].entries:
+            return None
+
+        endorsement_bytes = response.results[0].entries[0].value
+
+        return unmarshal(Endorsement, endorsement_bytes)
