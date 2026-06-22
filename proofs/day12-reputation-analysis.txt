@@ -1,0 +1,15 @@
+Day 12 Reputation Analysis
+
+Current reputation source:
+- Endorsement records
+
+Possible scoring models:
+1 endorsement = +1 reputation
+
+Future improvements:
+- weighted endorsements
+- time decay
+- trust graph scoring
+
+Conclusion:
+Reputation can be derived from endorsement records once endorsement aggregation is implemented.
