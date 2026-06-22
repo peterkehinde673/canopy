@@ -8,7 +8,7 @@ Matches Go's contract/contract.go structure.
 import random
 import struct
 from typing import Optional, Dict, Any, Union, Protocol, TYPE_CHECKING
-from contract.proto.account_pb2 import Account, Pool, Profile
+from contract.proto.account_pb2 import Account, Pool, Profile, Endorsement
 
 if TYPE_CHECKING:
     from .plugin import Plugin, Config
@@ -121,6 +121,9 @@ def key_for_fee_pool(chain_id: int) -> bytes:
 
 def key_for_profile(address: bytes) -> bytes:
     return b"profile/" + address
+
+def key_for_endorsement(sender: bytes, target: bytes) -> bytes:
+    return b"endorsement/" + sender + b"/" + target
 
 # Proto marshal/unmarshal utilities
 
@@ -455,4 +458,36 @@ class Contract:
         return result
 
     async def _deliver_message_endorse_user(self, msg):
-        return PluginDeliverResponse()
+        if not self.plugin:
+            raise PluginError(1, "plugin", "plugin not initialized")
+
+        endorsement = Endorsement()
+        endorsement.sender_address = msg.sender_address
+        endorsement.target_address = msg.target_address
+        endorsement.endorsement_reason = msg.endorsement_reason
+
+        endorsement_key = key_for_endorsement(
+            msg.sender_address,
+            msg.target_address
+        )
+
+        endorsement_bytes = marshal(endorsement)
+
+        write_resp = await self.plugin.state_write(
+            self,
+            PluginStateWriteRequest(
+                sets=[
+                    PluginSetOp(
+                        key=endorsement_key,
+                        value=endorsement_bytes
+                    )
+                ]
+            ),
+        )
+
+        result = PluginDeliverResponse()
+
+        if write_resp.HasField("error"):
+             result.error.CopyFrom(write_resp.error)
+
+        return result

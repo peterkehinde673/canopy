@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\raccount.proto\x12\x05types\"*\n\x07\x41\x63\x63ount\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\x0c\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x04\"\"\n\x04Pool\x12\n\n\x02id\x18\x01 \x01(\x04\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x04\">\n\x07Profile\x12\x14\n\x0cuser_address\x18\x01 \x01(\x0c\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x0b\n\x03\x62io\x18\x03 \x01(\tB.Z,github.com/canopy-network/go-plugin/contractb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\raccount.proto\x12\x05types\"*\n\x07\x41\x63\x63ount\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\x0c\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x04\"\"\n\x04Pool\x12\n\n\x02id\x18\x01 \x01(\x04\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x04\">\n\x07Profile\x12\x14\n\x0cuser_address\x18\x01 \x01(\x0c\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x0b\n\x03\x62io\x18\x03 \x01(\t\"Y\n\x0b\x45ndorsement\x12\x16\n\x0esender_address\x18\x01 \x01(\x0c\x12\x16\n\x0etarget_address\x18\x02 \x01(\x0c\x12\x1a\n\x12\x65ndorsement_reason\x18\x03 \x01(\tB.Z,github.com/canopy-network/go-plugin/contractb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -38,4 +38,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_POOL']._serialized_end=102
   _globals['_PROFILE']._serialized_start=104
   _globals['_PROFILE']._serialized_end=166
+  _globals['_ENDORSEMENT']._serialized_start=168
+  _globals['_ENDORSEMENT']._serialized_end=257
 # @@protoc_insertion_point(module_scope)
