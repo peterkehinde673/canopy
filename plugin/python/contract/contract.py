@@ -547,3 +547,9 @@ class Contract:
         endorsement_bytes = response.results[0].entries[0].value
 
         return unmarshal(Endorsement, endorsement_bytes)
+
+    async def get_reputation(self, endorsements):
+        if not endorsements:
+            return 0
+
+        return len(endorsements)
